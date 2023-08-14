@@ -3,8 +3,17 @@ const controller = require('./controller');
 const validation = require('./validation');
 const validate = require('../../middlewares/validate');
 const auth = require('../../middlewares/auth');
+const { storage, imageFilter } = require('../../utils/fileUpload')
+const multer = require("multer");
 
 const router = express.Router();
+
+const uploadPic = multer({
+
+  storage: storage,
+  fileFilter: imageFilter
+
+}).single('image');
 
 router
   .route('/')
@@ -17,7 +26,8 @@ router.route('/logout').post(validate(validation.logout), controller.logout);
 router
   .route('/users/:userId')
   .get(auth(), validate(validation.getUser), controller.getUser)
-  .patch(auth(), validate(validation.updateUser), controller.updateUser);
+  .patch(auth(), validate(validation.updateUser), uploadPic, controller.updateUser);
+  
 module.exports = {
   authRoutes: router,
 };

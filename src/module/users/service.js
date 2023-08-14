@@ -3,8 +3,9 @@ const ApiError = require('../../utils/ApiError');
 const { tokenTypes } = require('../../config/tokens');
 const User = require('./entity/model');
 const Token = require('../tokens/entity/model');
+
 const register = async (body) => {
-  if (User.isEmailTaken(body.email)) {
+  if (await User.isEmailTaken(body.email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User already exists');
   }
   return await User.create(body);
@@ -36,6 +37,8 @@ const loginUserWithEmailAndPassword = async (email, password, forced) => {
  * @returns {Promise<User>}
  */
 const getUser = async (filter) => {
+  const user = await User.findOne(filter)
+  console.log(user, 'user===========');
   return await User.findOne(filter);
 };
 
@@ -129,7 +132,11 @@ const resetPasswordviaEmail = async (email, newPassword) => {
  */
 
 const getUserById = async (id) => {
-  return await getUser({ id });
+  const user = await User.findById(id);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  return user;
 };
 
 /**
@@ -139,7 +146,7 @@ const getUserById = async (id) => {
  * @returns  {Promise<User>}
  */
 const updateUser = async (id, body) => {
-  const user = await getUser({ id });
+  const user = await User.findById(id);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }

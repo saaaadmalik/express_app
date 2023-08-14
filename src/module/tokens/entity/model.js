@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { tokenTypes } = require('../../../config/tokens');
+const { toJSON, paginate } = require('../../../utils/plugins');
 
 const tokenSchema = mongoose.Schema(
   {
@@ -19,7 +20,7 @@ const tokenSchema = mongoose.Schema(
     },
     type: {
       type: String,
-      enum: [tokenTypes.REFRESH, tokenTypes.RESET_PASSWORD],
+      enum: [tokenTypes.REFRESH, tokenTypes.RESET_PASSWORD, tokenTypes.VERIFY_EMAIL],
       required: true,
     },
     expires: {
@@ -36,6 +37,7 @@ const tokenSchema = mongoose.Schema(
   }
 );
 
+tokenSchema.plugin(toJSON);
 /**
  * @typedef Token
  */

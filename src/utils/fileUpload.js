@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const fileUpload = multer({ storage });
+
 
 const imageFilter = (req, file, cb) => {
   // Accept images only
@@ -25,6 +25,6 @@ const imageFilter = (req, file, cb) => {
 };
 
 module.exports = {
-  fileUpload,
+  storage,
   imageFilter,
 };

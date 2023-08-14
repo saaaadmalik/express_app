@@ -30,15 +30,18 @@ const queryUsers = catchAsync(async (req, res) => {
 });
 
 const getUser = catchAsync(async (req, res) => {
-  const { id } = req.params;
-  const result = await userService.getUserById(id);
+  const { userId } = req.params;
+  const result = await userService.getUserById(userId);
   res.send(result);
 });
 
 const updateUser = catchAsync(async (req, res) => {
-  const { id } = req.params;
+  const { userId } = req.params;
+  if(req.file){
+    req.body.photoPath = req.file.path
+  }
   const { body } = req;
-  const result = await userService.updateUser(id, body);
+  const result = await userService.updateUser(userId, body);
   res.send(result);
 });
 
