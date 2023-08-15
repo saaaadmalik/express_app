@@ -1,11 +1,13 @@
 const Joi = require('joi');
-const { password } = require('./custom.validation');
+const { password } = require('../../utils/custom.validation');
 
 const register = {
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().custom(password),
-    name: Joi.string().required(),
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
+    email: Joi.string().required(),
+    password: Joi.string().required(),
+    userName: Joi.string().required(),
   }),
 };
 
@@ -33,6 +35,7 @@ const forgotPassword = {
     email: Joi.string().email().required(),
   }),
 };
+
 
 const resetPassword = {
   query: Joi.object().keys({

@@ -17,17 +17,16 @@ const uploadPic = multer({
 
 router
   .route('/')
-  .post(validate(validation.register), controller.register)
-  .get(validate(validation.queryUsers), controller.queryUsers);
+  .post(auth(), validate(validation.createUser), controller.createUser)
+  .get(auth(),validate(validation.queryUsers), controller.queryUsers);
 
-router.route('/login').post(validate(validation.login), controller.login);
-router.route('/logout').post(validate(validation.logout), controller.logout);
 
 router
-  .route('/users/:userId')
-  .get(auth(), validate(validation.getUser), controller.getUser)
-  .patch(auth(), validate(validation.updateUser), uploadPic, controller.updateUser);
-  
+  .route('/:userId')
+  .get(auth('getUsers'), validate(validation.getUser), controller.getUser)
+  .patch(auth('manageUsers'), validate(validation.updateUser), uploadPic, controller.updateUser)
+  .delete(auth('manageUsers'), validate(validation.deleteUser), controller.deleteUser);
+
 module.exports = {
-  authRoutes: router,
+  userRoutes: router,
 };
